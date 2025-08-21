@@ -1,27 +1,27 @@
 import { ModuleMetadata, Type } from '@nestjs/common';
 
-export interface EcommerceDbOptions {
+export interface DbOptions {
   connectionString: string;
   global?: boolean;
 }
 
-export const ECOMMERCE_DB_OPTIONS_PROVIDER = Symbol(
-  'ECOMMERCE_DB_OPTIONS_PROVIDER',
+export const DB_OPTIONS_PROVIDER = Symbol(
+  'DB_OPTIONS_PROVIDER',
 );
 
-export interface EcommerceDbModuleFactory {
+export interface DbModuleFactory {
   createHttpModuleOptions: () =>
-    | Promise<EcommerceDbOptions>
-    | EcommerceDbOptions;
+    | Promise<DbOptions>
+    | DbOptions;
 }
 
-export interface EcommerceDbAsyncOptions
+export interface DbAsyncOptions
   extends Pick<ModuleMetadata, 'imports'> {
   inject?: any[];
   global: boolean;
-  useClass?: Type<EcommerceDbModuleFactory>;
-  useExisting?: Type<EcommerceDbModuleFactory>;
+  useClass?: Type<DbModuleFactory>;
+  useExisting?: Type<DbModuleFactory>;
   useFactory?: (
     ...args: any[]
-  ) => Promise<EcommerceDbOptions> | EcommerceDbOptions;
+  ) => Promise<DbOptions> | DbOptions;
 }

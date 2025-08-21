@@ -32,6 +32,7 @@ export const users = pgTable("users", {
   phone: varchar("phone",{length:255}).notNull(),
   fullName: varchar("full_name", { length: 255 }).notNull(),
   role: roleEnum("role").notNull().default(RoleEnum.User),
+  ...dateColumns
 });
 
 export const genderEnum = pgEnum("gender", GenderEnum);
@@ -41,6 +42,7 @@ export const brands = pgTable("brands", {
   id: uuid("id").primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
   gender: genderEnum("gender").notNull(),
+   ...dateColumns
 });
 
 // PRODUCTS
@@ -54,6 +56,7 @@ export const products = pgTable("products", {
   videoPath: varchar("video_path", { length: 255 }),
   slug: varchar("slug", { length: 255 }).notNull().unique(),
   topUntil: date("top_until").notNull(),
+   ...dateColumns
 });
 
 // PRODUCT IMAGES
@@ -63,6 +66,7 @@ export const productImages = pgTable("product_images", {
     .notNull()
     .references(() => products.id, { onDelete: "cascade" }),
   imagesPath: bytea("images_path").notNull(),
+   ...dateColumns
 });
 
 // ATTRIBUTE GROUPS
@@ -70,6 +74,7 @@ export const attributeGroups = pgTable("attribute_groups", {
   id: uuid("id").primaryKey(),
   name: jsonb("name").notNull(),
   sequence: integer("sequence"),
+   ...dateColumns
 });
 
 // ATTRIBUTES
@@ -78,6 +83,7 @@ export const attributes = pgTable("attributes", {
   groupId: uuid("group_id").references(() => attributeGroups.id),
   name: jsonb("name").notNull(),
   sequence: integer("sequence"),
+   ...dateColumns
 });
 
 // ATTRIBUTE OPTIONS
@@ -87,6 +93,7 @@ export const attributeOptions = pgTable("attribute_options", {
   groupId: uuid("group_id").notNull().references(() => attributeGroups.id),
   name: jsonb("name").notNull(),
   sequance: integer("sequance"),
+   ...dateColumns
 });
 
 // PRODUCT VARIATIONS
@@ -95,6 +102,7 @@ export const productVariations = pgTable("product_variations", {
   productId: uuid("product_id").notNull().references(() => products.id),
   name: varchar("name", { length: 500 }).notNull(),
   count: bigint("count", { mode: "number" }).notNull(),
+   ...dateColumns
 });
 
 // PRODUCT VARIATION ATTRIBUTE OPTIONS
@@ -103,6 +111,7 @@ export const productVariationAttributeOptions = pgTable("product_variatino_attri
   productVariationId: uuid("product_variation_id").notNull().references(() => productVariations.id),
   attributeOptionId: uuid("attribute_option_id").notNull().references(() => attributeOptions.id),
   productId: uuid("product_id").notNull().references(() => products.id),
+   ...dateColumns
 });
 
 
@@ -131,5 +140,6 @@ export const prices = pgTable("prices", {
       ADD GENERATED ALWAYS AS (price_usd - price_usd * COALESCE(discount_percentage, 0) / 100) STORED;
      */
 
-    createdAt: timestamp("created_at", { precision: 0 }).defaultNow()
+  
+    ...dateColumns
 });
